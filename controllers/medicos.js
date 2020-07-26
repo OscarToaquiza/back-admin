@@ -38,18 +38,70 @@ const crearMedico = async (req,res = response) =>{
     
 }
 
-const actualizarMedico = (req,res = response) =>{
-    res.json({
-        ok:true,
-        msg: 'actualizarMedico'
-    });
+const actualizarMedico = async (req,res = response) =>{
+    
+    const id = req.params.id;
+    const uid = req.uid;
+    try {
+
+        const medicoDB = await Medico.findById(id);
+        
+        if( !medicoDB ){
+            res.status(404).json({
+                ok:false,
+                msg: "Medico no ecnontrado por id"
+            });
+        }
+
+        const cambiosMedico = {
+            ... req.body,
+            usuario: uid
+        }
+
+        const medicoActualizado = await Medico.findByIdAndUpdate( id, cambiosMedico, {new : true} );
+
+        res.json({
+            ok:true,
+            medico: medicoActualizado
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            msg: "Error en el servidro"
+        })
+    }
+
+
 }
 
-const borrarMedico = (req,res = response) =>{
-    res.json({
-        ok:true,
-        msg: 'borrarMedico'
-    });
+const borrarMedico = async (req,res = response) =>{
+    const id = req.params.id;
+    try {
+
+        const medicoDB = await Medico.findById(id);
+        
+        if( !medicoDB ){
+            res.status(404).json({
+                ok:false,
+                msg: "Medico no ecnontrado por id"
+            });
+        }
+
+
+        await Medico.findByIdAndDelete(id);
+
+        res.json({
+            ok:true,
+            msg: 'Medico eliminado'
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            msg: "Error en el servidor"
+        })
+    }
 }
 
 
