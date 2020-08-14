@@ -6,7 +6,7 @@ const Usuario = require('../models/usuario');
 
 
 const borrarImagen = (path) => {
-    if ( fs.existsSync(path)  && medico.img != 'img_default.png' ) {
+    if ( fs.existsSync(path) ) {
         //borrar la imag anterior
         fs.unlinkSync(path);
     }
@@ -23,7 +23,9 @@ const actualizarImage = async ( tipo, id, nombreArchivo) => {
 
             pathViejo = `${pathViejo}/${tipo}/${ medico.img }`;
           
-            borrarImagen(pathViejo);
+            if( medico.img != 'no-img.jpg'){
+                borrarImagen(pathViejo);
+            }
 
             medico.img = nombreArchivo;
             await medico.save();
@@ -38,7 +40,9 @@ const actualizarImage = async ( tipo, id, nombreArchivo) => {
 
             pathViejo = `${pathViejo}/${tipo}/${ hospital.img }`;
           
-            borrarImagen(pathViejo);
+            if( hospital.img != 'no-img.jpg'){
+                borrarImagen(pathViejo);
+            }
 
             hospital.img = nombreArchivo;
             await hospital.save();
@@ -52,8 +56,9 @@ const actualizarImage = async ( tipo, id, nombreArchivo) => {
             }
 
             pathViejo = `${pathViejo}/${tipo}/${ usuario.img }`;
-          
-            borrarImagen(pathViejo);
+            if( usuario.img != 'no-img.jpg'){
+                borrarImagen(pathViejo);
+            }
 
             usuario.img = nombreArchivo;
             await usuario.save();

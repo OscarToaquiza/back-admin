@@ -42,4 +42,10 @@ router.delete(
     Medico.borrarMedico
     );
 
+router.get(
+        '/:id',
+        validarJWT,
+        Medico.getMedico
+    );
+
 module.exports = router

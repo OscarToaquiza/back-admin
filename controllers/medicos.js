@@ -104,10 +104,31 @@ const borrarMedico = async (req,res = response) =>{
     }
 }
 
+const getMedico = async (req,res = response) =>{
+
+    const idMedico = req.params.id;
+    try {
+
+    const medico = await Medico.findById(idMedico)
+                            .populate('usuario','nombre img')
+                            .populate('hospital','nombre img');
+
+        res.json({
+            ok:true,
+            medico
+        });
+    } catch (error) {
+        res.status(400).json({
+            ok:false,
+            msg: 'Medico no ecnontrado'
+        });
+    }
+}
 
 module.exports = {
     getMedicos,
     crearMedico,
     actualizarMedico,
-    borrarMedico
+    borrarMedico,
+    getMedico
 }
